@@ -1,0 +1,46 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  username  String  @unique
+  email     String  @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  commodities Commodity[]
+}
+
+model Commodity {
+  id        Int     @id @default(autoincrement())
+  name      String  
+  price     Float
+  despcription String?
+  count     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  group   Group     @relation(fields: [groupId], references: [id])
+  groupId  Int
+
+  user     User?    @relation(fields: [userId], references: [id])
+  userId   Int?
+}
+
+model Group {
+  id        Int     @id @default(autoincrement())
+  name      String  @unique
+  father    Group?  @relation("GroupToGroup", fields: [fatherId], references: [id])
+  children  Group[] @relation("GroupToGroup")
+  fatherId  Int?
+  commodities Commodity[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

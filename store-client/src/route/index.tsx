@@ -3,6 +3,7 @@ import  Login  from "../page/login";
 
 import Reg from "../page/reg";
 import Layouter from "../page/layout";
+import EditPage from "../page/edit";
 
 const router=createBrowserRouter([
     {
@@ -16,7 +17,12 @@ const router=createBrowserRouter([
     {
         path:"/layout",
         element: <Layouter />,
-
+        children: [{
+            path:"/layout/edit",    
+            element: <EditPage/>
+        }]
+            
+        
     }
 ])
 export default router;

@@ -13,5 +13,10 @@ type product = {
     groupId: string;
     creatorId: string;
 }
+type category = {
+    name: string
+    fatherId:number
+    id:number
+}
 
-export type { user, product };
+export type { user, product, category };

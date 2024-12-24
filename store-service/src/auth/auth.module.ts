@@ -13,7 +13,7 @@ export const jwtSecret = 'elpsycongroo';
   imports: [
     JwtModule.register({
       secret: jwtSecret,
-      signOptions: { expiresIn: '1h' },//定义token的过期时间
+      signOptions: { expiresIn: '24h' },//定义token的过期时间
     }),
     PrismaModule,
     PassportModule,

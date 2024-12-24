@@ -11,8 +11,9 @@ const ProductList = ( { productlist } : { productlist: Array<product> }) => {
         <>
             {productlist.map(product =>
                 <Card
+                    key={product.name}
                     hoverable
-                    style={{ width: 240,display: 'inline-block',marginRight: 10,marginBottom: 10 }}
+                    style={{ height: 400,width: 250,marginRight: 10,marginBottom: 10,display: "inline-block" }}
                     cover={<img alt="example" src={product.image} />}
                 >
                     <Meta 

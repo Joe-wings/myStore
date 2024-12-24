@@ -36,7 +36,7 @@ export class GroupController {
   }
 
   //根据分类返回商品列表
-  @Get(':id')
+  @Get('/findProductByGroup/:id')
   findProductByGroup(@Param('id') id: number) {
     return this.groupService.findProductsByGroupId(+id);
   }

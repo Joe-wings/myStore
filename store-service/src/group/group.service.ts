@@ -19,23 +19,6 @@ export class GroupService {
     });
   }
 
-  findOne(id: number) {
-    return this.prisma.group.findMany({
-      where: { id: id },
-      include: {
-        products: true,
-      },
-    });
-  }
-  //根据类名检索
- search(name: string) {
-    return this.prisma.group.findMany({
-      where: { name: { contains: name } },
-      include: {
-        products: true,
-      },
-    });
-  }
   update(id: number, updateGroupDto: UpdateGroupDto) {
     return this.prisma.group.update({
       where: { id: id },
@@ -44,8 +27,54 @@ export class GroupService {
   }
 
   remove(id: number) {
-    return this.prisma.group.delete({ 
-      where: { id: id } 
+    return this.prisma.group.delete({
+      where: { id: id },
     });
+  }
+
+  //根据类名检索
+  search(name: string) {
+    return this.prisma.group.findMany({
+      where: { name: { contains: name } },
+      include: {
+        products: true,
+      },
+    });
+  }
+  //根据分类返回商品列表,父级分类返回子分类下的所有商品列表
+  async findProductsByGroupId(id: number) {
+    //定义用来递归的方法，以查找最底层的分类,返回该类下的所有最底层类
+    const findBottom = async (id: number, categoryId: number[]) => {
+      const group = await this.prisma.group.findFirst({
+        where: { fatherId: id },
+      });
+      //没有子分类，说明已经是最底层的分类了
+      if (!group) {
+        categoryId.push(id); //将最底层的分类id加入数组
+        
+      } else {
+        //有子分类，递归查找
+        //找出该分类下的所有子分类
+        const childs = await this.prisma.group.findMany({
+          where: { fatherId: id },
+        });
+        //递归查找子分类
+        for (const child of childs) {
+          await findBottom(child.id, categoryId);
+        }
+      }
+      return categoryId;
+    };
+    //调用递归方法，返回所有最底层分类的id
+    const categoryIds = await findBottom(id,[]);
+    //根据最底层分类的id数组，查找所有商品
+    const products = await this.prisma.product.findMany({
+      where: {
+        groupId: {
+          in: categoryIds,
+        },
+      },
+    });
+    return products;
   }
 }

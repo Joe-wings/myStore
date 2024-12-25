@@ -25,6 +25,11 @@ export class GroupController {
     return this.groupService.findAll();
   }
 
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.groupService.findOne(+id);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateGroupDto: UpdateGroupDto) {
     return this.groupService.update(+id, updateGroupDto);
@@ -34,7 +39,6 @@ export class GroupController {
   remove(@Param('id') id: string) {
     return this.groupService.remove(+id);
   }
-
   //根据分类返回商品列表
   @Get('/findProductByGroup/:id')
   findProductByGroup(@Param('id') id: number) {

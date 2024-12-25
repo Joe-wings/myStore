@@ -15,8 +15,16 @@ const getProductsByGroupApi =  (id:number) => {
         method: 'GET',
     })
 }
+const getGroupByIdApi =  (id:number) => {
+    return request({
+        url: `/group/${id}`,
+        method: 'GET',
+    })
+}
+
 
 export {
     getGroupsApi,
-    getProductsByGroupApi
+    getProductsByGroupApi,
+    getGroupByIdApi
 }

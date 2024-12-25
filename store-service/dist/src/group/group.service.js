@@ -15,6 +15,23 @@ const prisma_service_1 = require("../prisma/prisma.service");
 let GroupService = class GroupService {
     constructor(prisma) {
         this.prisma = prisma;
+        this.findBottom = async (id, categoryId) => {
+            const group = await this.prisma.group.findFirst({
+                where: { fatherId: id },
+            });
+            if (!group) {
+                categoryId.push(id);
+            }
+            else {
+                const childs = await this.prisma.group.findMany({
+                    where: { fatherId: id },
+                });
+                for (const child of childs) {
+                    await this.findBottom(child.id, categoryId);
+                }
+            }
+            return categoryId;
+        };
     }
     create(createGroupDto) {
         return this.prisma.group.create({
@@ -26,6 +43,11 @@ let GroupService = class GroupService {
             include: {
                 products: true,
             },
+        });
+    }
+    findOne(id) {
+        return this.prisma.group.findUnique({
+            where: { id: id },
         });
     }
     update(id, updateGroupDto) {
@@ -48,24 +70,7 @@ let GroupService = class GroupService {
         });
     }
     async findProductsByGroupId(id) {
-        const findBottom = async (id, categoryId) => {
-            const group = await this.prisma.group.findFirst({
-                where: { fatherId: id },
-            });
-            if (!group) {
-                categoryId.push(id);
-            }
-            else {
-                const childs = await this.prisma.group.findMany({
-                    where: { fatherId: id },
-                });
-                for (const child of childs) {
-                    await findBottom(child.id, categoryId);
-                }
-            }
-            return categoryId;
-        };
-        const categoryIds = await findBottom(id, []);
+        const categoryIds = await this.findBottom(id, []);
         const products = await this.prisma.product.findMany({
             where: {
                 groupId: {

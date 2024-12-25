@@ -31,6 +31,13 @@ export declare class GroupController {
         createdAt: Date;
         updatedAt: Date;
     })[]>;
+    findOne(id: string): import(".prisma/client").Prisma.Prisma__GroupClient<{
+        id: number;
+        name: string;
+        fatherId: number | null;
+        createdAt: Date;
+        updatedAt: Date;
+    }, null, import("@prisma/client/runtime/library").DefaultArgs>;
     update(id: string, updateGroupDto: UpdateGroupDto): import(".prisma/client").Prisma.Prisma__GroupClient<{
         id: number;
         name: string;

@@ -31,6 +31,13 @@ export declare class GroupService {
         createdAt: Date;
         updatedAt: Date;
     })[]>;
+    findOne(id: number): import(".prisma/client").Prisma.Prisma__GroupClient<{
+        id: number;
+        name: string;
+        fatherId: number | null;
+        createdAt: Date;
+        updatedAt: Date;
+    }, null, import("@prisma/client/runtime/library").DefaultArgs>;
     update(id: number, updateGroupDto: UpdateGroupDto): import(".prisma/client").Prisma.Prisma__GroupClient<{
         id: number;
         name: string;
@@ -77,4 +84,5 @@ export declare class GroupService {
         creatorId: number;
         groupId: number;
     }[]>;
+    findBottom: (id: number, categoryId: number[]) => Promise<number[]>;
 }

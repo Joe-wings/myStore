@@ -27,6 +27,9 @@ let GroupController = class GroupController {
     findAll() {
         return this.groupService.findAll();
     }
+    findOne(id) {
+        return this.groupService.findOne(+id);
+    }
     update(id, updateGroupDto) {
         return this.groupService.update(+id, updateGroupDto);
     }
@@ -51,6 +54,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], GroupController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], GroupController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     __param(0, (0, common_1.Param)('id')),

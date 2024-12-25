@@ -33,6 +33,9 @@ let ProductController = class ProductController {
     findOne(id) {
         return this.productService.findOne(+id);
     }
+    findByCreatorId(id) {
+        return this.productService.findByCreatorId(+id);
+    }
     update(id, updateProductDto) {
         return this.productService.update(+id, updateProductDto);
     }
@@ -70,7 +73,17 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ProductController.prototype, "findOne", null);
 __decorate([
-    (0, common_1.Patch)('/change/:id'),
+    (0, common_1.Get)('/getbyuserid/:id'),
+    (0, common_2.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)(),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], ProductController.prototype, "findByCreatorId", null);
+__decorate([
+    (0, common_1.Put)('/change/:id'),
+    (0, common_2.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiBearerAuth)(),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
@@ -80,6 +93,7 @@ __decorate([
 ], ProductController.prototype, "update", null);
 __decorate([
     (0, common_1.Get)('search/:query'),
+    (0, common_2.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiBearerAuth)(),
     __param(0, (0, common_1.Param)('query')),
     __metadata("design:type", Function),
@@ -88,6 +102,7 @@ __decorate([
 ], ProductController.prototype, "search", null);
 __decorate([
     (0, common_1.Delete)('/delete/:id'),
+    (0, common_2.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiBearerAuth)(),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),

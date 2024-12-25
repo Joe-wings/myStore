@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete,Put} from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -31,22 +31,29 @@ export class ProductController {
     return this.productService.findOne(+id);
   }
 
-  @Patch('/change/:id')
+  @Get('/getbyuserid/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  findByCreatorId(@Param('id') id: string) {
+    return this.productService.findByCreatorId(+id);
+  }
 
+  @Put('/change/:id')
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productService.update(+id, updateProductDto);
   }
 
   @Get('search/:query')
-
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   search(@Param('query') query: string) {
     return this.productService.search(query);
   }
 
   @Delete('/delete/:id')
-
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   remove(@Param('id') id: string) {
     return this.productService.remove(+id);

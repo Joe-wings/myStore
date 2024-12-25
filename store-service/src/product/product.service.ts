@@ -16,9 +16,15 @@ export class ProductService {
   }
 
   findOne(id: number) {
-    return this.prisma.product.findMany({
+    return this.prisma.product.findUnique({
       where: { id },
     });;
+  }
+
+  findByCreatorId(id: number){
+    return this.prisma.product.findMany({
+      where: { creatorId: id },
+    });
   }
 
   search(query: string) {

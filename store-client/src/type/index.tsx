@@ -6,14 +6,17 @@ type user = {
 }
 
 type product = {
+    id: number;
     name: string;
     price: number;
     description: string;
     count: number;
-    groupId: string;
-    creatorId: string;
+    groupId: number;
+    creatorId: number;
+    image: string;
 }
 type category = {
+    products: product[];
     name: string
     fatherId:number
     id:number

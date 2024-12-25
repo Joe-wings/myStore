@@ -2,9 +2,17 @@ import { product } from "../type";
 import { request } from "../utils";
 
 //获取所有商品
-const getProductsApi =  () => {
+const getProductsApi = () => {
     return request({
         url: '/product',
+        method: 'GET',
+    })
+}
+
+//根据id获取商品
+const getProductByIdApi = (id: number) => {
+    return request({
+        url: `/product/getbyid/${id}`,
         method: 'GET',
     })
 }
@@ -17,11 +25,18 @@ const createProductApi = (data: product) => {
         data
     })
 }
+//根据用户id获取商品
+const getProductsByUserIdApi = (userId: number) => {
+    return request({
+        url: `/product/getbyuserid/${userId}`,
+        method: 'GET',
+    })
+}
 
 //更新商品
 const updateProductApi = (id: number, data: product) => {
     return request({
-        url: `/product/${id}`,
+        url: `/product/change/${id}`,
         method: 'PUT',
         data
     })
@@ -30,7 +45,7 @@ const updateProductApi = (id: number, data: product) => {
 //删除商品
 const deleteProductApi = (id: number) => {
     return request({
-        url: `/product/${id}`,
+        url: `/product/delete/${id}`,
         method: 'DELETE',
     })
 }
@@ -46,4 +61,7 @@ export {
     createProductApi,
     updateProductApi,
     deleteProductApi,
-    searchProductApi}
+    searchProductApi,
+    getProductsByUserIdApi,
+    getProductByIdApi
+}

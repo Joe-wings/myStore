@@ -1,23 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { UserOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Button, Input, Layout, Menu, theme } from "antd";
 import ProductList from "../../compent/Product/ProdcuList";
 import { getProductsApi, searchProductApi } from "../../api/product";
 import { product, category } from "../../type";
 import { getProductsByGroupApi, getGroupsApi } from "../../api/group";
+import Usermanager from "../../compent/Usermanager";
 
 const { Header, Content, Sider } = Layout;
 
-const items1: MenuProps["items"] = [{key:"/layout", label:"商品列表"}, {key:"/layout/edit",label:"创建商品"},{key:"3",label:"商品列表"} ].map((key) => ({
+const items1: MenuProps["items"] = [
+  { key: "/layout", label: "所有商品列表" },
+  { key: "/layout/edit", label: "创建商品" },
+  { key: "/layout/manage", label: "管理我的商品" },
+].map((key) => ({
   key: key.key,
   label: `${key.label}`,
-  onClick: () => console.log(`clicked ${key}`),
 }));
 
 const Layouter: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [productList, setProductList] = useState<product[]>([]);
   const [value, setValue] = useState("");
   const [categoryList, setCategoryList] = useState<category[]>([]);
@@ -37,6 +42,11 @@ const Layouter: React.FC = () => {
         }
       }
     };
+    if (location.pathname === "/layout") {
+      setVisible(true);
+    } else {
+      setVisible(false);
+    }
     fetchData();
   }, []);
 
@@ -48,8 +58,7 @@ const Layouter: React.FC = () => {
 
   //分组商品
   const grouped = async (e: any) => {
-
-    let id = parseInt(e.key)
+    let id = parseInt(e.key);
     const response = await getProductsByGroupApi(id);
     setProductList(response.data);
   };
@@ -69,21 +78,24 @@ const Layouter: React.FC = () => {
         const response = await getProductsApi();
         setProductList(response.data);
       },
-      children: categoryList.filter(c => c.fatherId === null).map(category => {
-        return {
-          key: category.id,
-          label: category.name,
-          children: categoryList.filter(c => c.fatherId === category.id).map(category => {
-            return {
-              label: category.name,
-              key: category.id,
-
-            };
-          }),
-        };
-      })
-    }
-  })
+      children: categoryList
+        .filter((c) => c.fatherId === null)
+        .map((category) => {
+          return {
+            key: category.id,
+            label: category.name,
+            children: categoryList
+              .filter((c) => c.fatherId === category.id)
+              .map((category) => {
+                return {
+                  label: category.name,
+                  key: category.id,
+                };
+              }),
+          };
+        }),
+    };
+  });
   return (
     <Layout>
       <Header
@@ -101,50 +113,61 @@ const Layouter: React.FC = () => {
           defaultSelectedKeys={["2"]}
           items={items1}
           style={{ flex: 1, minWidth: 0 }}
-          onClick={(e) => { if (e.key !== "/layout") { setVisible(false) }else{ setVisible(true) } navigate(e.key) }
-          }
+          onClick={(e) => {
+            if (e.key !== "/layout") {
+              setVisible(false);
+            } else {
+              setVisible(true);
+            }
+            navigate(e.key);
+          }}
         />
-        {visible && <><Input
-          placeholder="Search"
-          type="text"
-          style={{ width: 200, margin: "0 16px" }}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-        <Button type="primary" style={{ marginLeft: 4 }} onClick={search}>
-          搜索
-        </Button></>
-        }
+        <Usermanager/>
+
+        {visible && (
+          <>
+            <Input
+              placeholder="Search"
+              type="text"
+              style={{ width: 200, margin: "0 10px 0 150px" }}
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+            />
+            <Button type="primary" style={{ marginLeft: 4 }} onClick={search}>
+              搜索
+            </Button>
+          </>
+        )}
         
       </Header>
       <Outlet />
-      {visible&&<Layout>
-        <Sider width={200} style={{ background: colorBgContainer }}>
-          <Menu
-            mode="inline"
-            defaultSelectedKeys={["1"]}
-            defaultOpenKeys={["sub1"]}
-            style={{ height: "100%", borderRight: 0 }}
-            items={items2}
-            onClick={grouped}
-          />
-        </Sider>
-        <Layout style={{ padding: "0 24px 24px" }}>
-
-          <Content
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 280,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-            <ProductList productlist={productList} />
-          </Content>
+      {visible && (
+        <Layout>
+          <Sider width={200} style={{ background: colorBgContainer }}>
+            <Menu
+              mode="inline"
+              defaultSelectedKeys={["1"]}
+              defaultOpenKeys={["sub1"]}
+              style={{ height: "100%", borderRight: 0 }}
+              items={items2}
+              onClick={grouped}
+            />
+          </Sider>
+          <Layout style={{ padding: "0 24px 24px" }}>
+            <Content
+              style={{
+                padding: 24,
+                margin: 0,
+                minHeight: 280,
+                background: colorBgContainer,
+                borderRadius: borderRadiusLG,
+              }}
+            >
+              <ProductList productlist={productList} />
+            </Content>
+          </Layout>
         </Layout>
-      </Layout>}
-      
+      )}
     </Layout>
   );
 };

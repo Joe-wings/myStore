@@ -12,6 +12,13 @@ export declare class GroupController {
         updatedAt: Date;
     }, never, import("@prisma/client/runtime/library").DefaultArgs>;
     findAll(): import(".prisma/client").Prisma.PrismaPromise<({
+        children: {
+            id: number;
+            name: string;
+            fatherId: number | null;
+            createdAt: Date;
+            updatedAt: Date;
+        }[];
         products: {
             id: number;
             name: string;

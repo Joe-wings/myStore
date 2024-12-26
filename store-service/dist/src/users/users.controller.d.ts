@@ -7,7 +7,7 @@ export declare class UsersController {
     constructor(usersService: UsersService);
     register(createUserDto: CreateUserDto): Promise<UserEntity>;
     findAll(): Promise<UserEntity[]>;
-    findOne(id: string): Promise<UserEntity[]>;
+    findOne(id: string): Promise<UserEntity>;
     update(id: string, updateUserDto: UpdateUserDto): Promise<UserEntity>;
     remove(id: string): Promise<UserEntity>;
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { UserOutlined } from "@ant-design/icons";
+import { MenuOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Button, Input, Layout, Menu, theme } from "antd";
@@ -27,20 +27,15 @@ const Layouter: React.FC = () => {
   const [value, setValue] = useState("");
   const [categoryList, setCategoryList] = useState<category[]>([]);
   const [visible, setVisible] = useState(true);
-
   //获取所有商品和分类数据
   useEffect(() => {
     const fetchData = async () => {
-      try {
+      
         const response = await getProductsApi();
         setProductList(response.data);
         const response1 = await getGroupsApi();
         setCategoryList(response1.data);
-      } catch (error: any) {
-        if (error.status === 401) {
-          navigate("/");
-        }
-      }
+      
     };
     if (location.pathname === "/layout") {
       setVisible(true);
@@ -48,7 +43,7 @@ const Layouter: React.FC = () => {
       setVisible(false);
     }
     fetchData();
-  }, []);
+  }, [location.pathname]);
 
   //搜索商品
   const search = async () => {
@@ -67,12 +62,17 @@ const Layouter: React.FC = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  //查找子分类
+  const findSubCategory = (id: number, categoryList: category[]) => {
+    return categoryList.filter((c) => c.fatherId === id) || undefined;
+  };
+
+  //左侧导航栏
   //层级分类
-  const items2: MenuProps["items"] = [UserOutlined].map((icon, index) => {
-    const key = String(index + 1);
+  const items2: MenuProps["items"] = [1].map((key) => {
     return {
       key: `sub${key}`,
-      icon: React.createElement(icon),
+      icon: <MenuOutlined />,
       label: `商品分类`,
       onTitleClick: async () => {
         const response = await getProductsApi();
@@ -81,21 +81,41 @@ const Layouter: React.FC = () => {
       children: categoryList
         .filter((c) => c.fatherId === null)
         .map((category) => {
-          return {
-            key: category.id,
-            label: category.name,
-            children: categoryList
-              .filter((c) => c.fatherId === category.id)
-              .map((category) => {
-                return {
-                  label: category.name,
-                  key: category.id,
-                };
-              }),
-          };
+          return findSubCategory(category.id, categoryList).length > 0
+            ? {
+                key: category.id,
+                label: category.name,
+                children: findSubCategory(category.id, categoryList).map(
+                  (category) => {
+                    return findSubCategory(category.id, categoryList).length > 0
+                      ? {
+                          key: category.id,
+                          label: category.name,
+                          children: findSubCategory(
+                            category.id,
+                            categoryList
+                          ).map((category) => {
+                            return {
+                              label: category.name,
+                              key: category.id,
+                            };
+                          }),
+                        }
+                      : {
+                          key: category.id,
+                          label: category.name,
+                        };
+                  }
+                ),
+              }
+            : {
+                key: category.id,
+                label: category.name,
+              };
         }),
     };
   });
+
   return (
     <Layout>
       <Header
@@ -106,39 +126,36 @@ const Layouter: React.FC = () => {
           height: "64px",
         }}
       >
-        <div className="demo-logo" />
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={["2"]}
+          defaultSelectedKeys={[window.location.pathname]}
           items={items1}
           style={{ flex: 1, minWidth: 0 }}
           onClick={(e) => {
-            if (e.key !== "/layout") {
-              setVisible(false);
-            } else {
-              setVisible(true);
-            }
             navigate(e.key);
           }}
         />
-        <Usermanager/>
-
         {visible && (
           <>
             <Input
               placeholder="Search"
               type="text"
-              style={{ width: 200, margin: "0 10px 0 150px" }}
+              style={{ width: 200, margin: "0 10px" }}
               value={value}
               onChange={(e) => setValue(e.target.value)}
             />
-            <Button type="primary" style={{ marginLeft: 4 }} onClick={search}>
+            <Button
+              type="primary"
+              style={{ marginLeft: 4, marginRight: 100 }}
+              onClick={search}
+            >
               搜索
             </Button>
           </>
         )}
-        
+
+        <Usermanager />
       </Header>
       <Outlet />
       {visible && (

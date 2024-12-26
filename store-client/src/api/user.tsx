@@ -2,7 +2,7 @@ import { user } from "../type";
 import { request } from "../utils";
 function registerApi(data: user) {
   return request({
-    url: "/user/",
+    url: "/users/",
     method: "POST",
     data
   })

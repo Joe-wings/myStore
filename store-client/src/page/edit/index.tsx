@@ -1,23 +1,36 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Form, Input, InputNumber, message, TreeSelect, Upload } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  TreeSelect,
+  Upload,
+  UploadFile,
+  UploadProps,
+} from "antd";
 import { category } from "../../type";
 import { useEffect, useState } from "react";
 import { getGroupsApi } from "../../api/group";
-import { createProductApi, getProductByIdApi, updateProductApi } from "../../api/product";
+import {
+  createProductApi,
+  getProductByIdApi,
+  updateProductApi,
+} from "../../api/product";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 const { TextArea } = Input;
 
-const normFile = (e: any) => {
-  if (Array.isArray(e)) {
-    return e;
-  }
-  return e?.fileList;
-};
-
 const EditPage = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  //受控绑定图片列表
+  const [imageList, setImageList] = useState<UploadFile[]>([]);
+  const onChangeUpload: UploadProps["onChange"] = ({ fileList: newFileList }) =>
+    setImageList(newFileList);
+
   //获取路由参数，判断是编辑还是创建模式
   const [searchParams] = useSearchParams();
   const productId = parseInt(searchParams.get("id") || "0");
@@ -34,8 +47,12 @@ const EditPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getGroupsApi();
-      setCategoryList(response.data.filter((category: { products: string | any[]; }) => category.products.length > 0));
-        
+      setCategoryList(
+        response.data.filter(
+          (category: category) =>
+            category.children.length=== 0
+        )
+      );
     };
     fetchData();
   }, []);
@@ -43,12 +60,27 @@ const EditPage = () => {
   //根据id回填数据
   const [form] = Form.useForm();
   useEffect(() => {
-    if (productId!==0) {
+    if (productId !== 0) {
       const fetchData = async () => {
         const response = await getProductByIdApi(productId);
-        console.log(response.data);
-        form.setFieldsValue(response.data);
+        form.setFieldsValue({
+          name: response.data.name,
+          groupId: response.data.groupId,
+          price: response.data.price,
+          count: response.data.count,
+          description: response.data.description,
+        });
+        setImageList([
+          {
+            uid: "-1",
+            name: "image.png",
+            status: "done",
+            url: response.data.image,
+            thumbUrl: response.data.image,
+          },
+        ]);
       };
+
       fetchData();
     }
   }, [productId, form]);
@@ -58,22 +90,22 @@ const EditPage = () => {
     //用户id作为商品创建者id
     const product = {
       ...values,
-      image:values.image[0].thumbUrl,
+      image: imageList[0].thumbUrl,
       creatorId: id,
     };
     //判断是更新还是创建
-    if (productId!==0) {
-        await updateProductApi(productId,product);
-        message.success("更新成功");
-        setTimeout(() => {
-          navigate("/layout/manage");
-        }, 1000);
-    }else{
-    await createProductApi(product);
-    message.success("创建成功");
-    setTimeout(() => {
-      navigate("/layout/manage");
-    }, 1000);
+    if (productId !== 0) {
+      await updateProductApi(productId, product);
+      message.success("更新成功");
+      setTimeout(() => {
+        navigate("/layout/manage");
+      }, 1000);
+    } else {
+      await createProductApi(product);
+      message.success("创建成功");
+      setTimeout(() => {
+        navigate("/layout/manage");
+      }, 1000);
     }
   };
 
@@ -129,22 +161,25 @@ const EditPage = () => {
         >
           <TextArea rows={4} />
         </Form.Item>
-        <Form.Item
-          label="商品图片"
-          name="image"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-        >
-          <Upload action="/upload.do" listType="picture-card" maxCount={1}>
-            <button style={{ border: 0, background: "none" }} type="button">
+        <Form.Item label="库存图片">
+          <Upload
+            name="image"
+            listType="picture-card"
+            className="avatar-uploader"
+            showUploadList
+            maxCount={1}
+            onChange={onChangeUpload}
+            fileList={imageList}
+          >
+            <div style={{ marginTop: 8 }}>
               <PlusOutlined />
-              <div style={{ marginTop: 8 }}>Upload</div>
-            </button>
+            </div>
           </Upload>
         </Form.Item>
+
         <Form.Item wrapperCol={{ span: 16 }}>
           <Button type="primary" htmlType="submit">
-            {productId !==0 ? "更新" : "创建"}
+            {productId !== 0 ? "更新" : "创建"}
           </Button>
         </Form.Item>
       </Form>

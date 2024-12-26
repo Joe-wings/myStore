@@ -11,15 +11,13 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
   @ApiCreatedResponse({ type: UserEntity })  //请求状态码为201时，指定响应返回的类型
   async register(@Body() createUserDto: CreateUserDto) {
     return new UserEntity(await this.usersService.create(createUserDto));
   }
 
   @Get()
-
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: UserEntity})  //请求状态码为200时，指定响应返回的类型
   async findAll() {
     const users = (await this.usersService.findAll()).map(user => new UserEntity(user));
@@ -27,18 +25,21 @@ export class UsersController {
   }
 
   @Get('/getbyid/:id')
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: UserEntity})  //请求状态码为200时，指定响应返回的类型
   async findOne(@Param('id') id: string) {
-    return (await this.usersService.findOne(+id)).map(user => new UserEntity(user))
+    return new UserEntity(await this.usersService.findOne(+id))
   }
 
   @Patch('/change/:id')
+
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return new UserEntity( await this.usersService.update(+id, updateUserDto));
      
   }
 
   @Delete('delete/:id')
+  @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: string) {
     return new UserEntity(await this.usersService.remove(+id));
   }

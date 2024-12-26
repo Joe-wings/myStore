@@ -5,11 +5,13 @@ import { deleteProductApi, getProductsByUserIdApi } from "../../api/product";
 import { jwtDecode } from "jwt-decode";
 import { product } from "../../type";
 import { getGroupsApi } from "../../api/group";
+import { getToken } from "../../utils";
 
 const Manage: React.FC = () => {
   const [myProducts, setMyProducts] = useState<product[]>([]);
   const [groups, setGroups] = useState<any[]>([]);
-  const decode: { id: number } = jwtDecode(localStorage.getItem("token") || "");
+  
+  const decode: { id: number } = jwtDecode(getToken()||"");
   const id = decode?.id;
   useEffect(() => {
     const fetchData = async () => {
@@ -50,10 +52,10 @@ const Manage: React.FC = () => {
         pageSize: 8,
       }}
       dataSource={data}
-      style={{ minWidth: 500, maxWidth: 1500 }}
+      style={{ minWidth: 500, maxWidth: 1000,margin:"0 auto"}}
       renderItem={(item) => (
         <List.Item
-          style={{ height: 150 }}
+          style={{ maxHeight: 250, overflow: "auto", padding: 10 }}
           key={item.title}
           extra={<img width={100} alt="logo" src={item.image} />}
         >
@@ -80,15 +82,16 @@ const Manage: React.FC = () => {
           <br />
           &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
           <Popconfirm
-            description="确认要删除当前文章吗？"
+            description="确认要下架当前商品吗？"
             onConfirm={async () => {
               await deleteProductApi(item.id);
               setMyProducts(
                 myProducts.filter((product) => product.id !== item.id)
               );
             }}
-            okText="yes"
             cancelText="no"
+            okText="yes"
+            
             title={undefined}
           >
             <DeleteOutlined />

@@ -32,7 +32,7 @@ let UsersController = class UsersController {
         return users.map(user => new user_entity_1.UserEntity(user));
     }
     async findOne(id) {
-        return (await this.usersService.findOne(+id)).map(user => new user_entity_1.UserEntity(user));
+        return new user_entity_1.UserEntity(await this.usersService.findOne(+id));
     }
     async update(id, updateUserDto) {
         return new user_entity_1.UserEntity(await this.usersService.update(+id, updateUserDto));
@@ -44,8 +44,6 @@ let UsersController = class UsersController {
 exports.UsersController = UsersController;
 __decorate([
     (0, common_1.Post)(),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiBearerAuth)(),
     (0, swagger_1.ApiCreatedResponse)({ type: user_entity_1.UserEntity }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -54,6 +52,7 @@ __decorate([
 ], UsersController.prototype, "register", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOkResponse)({ type: user_entity_1.UserEntity }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
@@ -61,6 +60,7 @@ __decorate([
 ], UsersController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('/getbyid/:id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiOkResponse)({ type: user_entity_1.UserEntity }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -77,6 +77,7 @@ __decorate([
 ], UsersController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)('delete/:id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

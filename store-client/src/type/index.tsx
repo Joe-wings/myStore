@@ -20,6 +20,7 @@ type category = {
     name: string
     fatherId:number
     id:number
+    children:category[]
 }
 
 export type { user, product, category };

@@ -1,6 +1,13 @@
 
 import { request } from "../utils";
-
+//新建分类
+const createGroupApi =  (data:{name:string,fatherId?:number}) => {
+    return request({
+        url: '/group',
+        method: 'POST',
+        data
+    })
+}
 //获取分类列表
 const getGroupsApi =  () => {
     return request({
@@ -26,5 +33,6 @@ const getGroupByIdApi =  (id:number) => {
 export {
     getGroupsApi,
     getProductsByGroupApi,
-    getGroupByIdApi
+    getGroupByIdApi,
+    createGroupApi
 }

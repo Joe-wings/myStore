@@ -5,91 +5,91 @@ export declare class GroupService {
     private readonly prisma;
     constructor(prisma: PrismaService);
     create(createGroupDto: CreateGroupDto): import(".prisma/client").Prisma.Prisma__GroupClient<{
-        id: number;
-        name: string;
         fatherId: number | null;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
+        name: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs>;
     findAll(): import(".prisma/client").Prisma.PrismaPromise<({
-        children: {
-            id: number;
-            name: string;
-            fatherId: number | null;
-            createdAt: Date;
-            updatedAt: Date;
-        }[];
         products: {
             id: number;
-            name: string;
             createdAt: Date;
             updatedAt: Date;
-            price: number;
+            name: string;
             description: string | null;
-            image: string | null;
+            price: number;
             count: number;
-            creatorId: number;
             groupId: number;
+            creatorId: number;
+            image: string | null;
+        }[];
+        children: {
+            fatherId: number | null;
+            id: number;
+            createdAt: Date;
+            updatedAt: Date;
+            name: string;
         }[];
     } & {
-        id: number;
-        name: string;
         fatherId: number | null;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
+        name: string;
     })[]>;
     findOne(id: number): import(".prisma/client").Prisma.Prisma__GroupClient<{
-        id: number;
-        name: string;
         fatherId: number | null;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
+        name: string;
     }, null, import("@prisma/client/runtime/library").DefaultArgs>;
     update(id: number, updateGroupDto: UpdateGroupDto): import(".prisma/client").Prisma.Prisma__GroupClient<{
-        id: number;
-        name: string;
         fatherId: number | null;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
+        name: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs>;
     remove(id: number): import(".prisma/client").Prisma.Prisma__GroupClient<{
-        id: number;
-        name: string;
         fatherId: number | null;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
+        name: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs>;
     search(name: string): import(".prisma/client").Prisma.PrismaPromise<({
         products: {
             id: number;
-            name: string;
             createdAt: Date;
             updatedAt: Date;
-            price: number;
+            name: string;
             description: string | null;
-            image: string | null;
+            price: number;
             count: number;
-            creatorId: number;
             groupId: number;
+            creatorId: number;
+            image: string | null;
         }[];
     } & {
-        id: number;
-        name: string;
         fatherId: number | null;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
+        name: string;
     })[]>;
     findProductsByGroupId(id: number): Promise<{
         id: number;
-        name: string;
         createdAt: Date;
         updatedAt: Date;
-        price: number;
+        name: string;
         description: string | null;
-        image: string | null;
+        price: number;
         count: number;
-        creatorId: number;
         groupId: number;
+        creatorId: number;
+        image: string | null;
     }[]>;
     findBottom: (id: number, categoryId: number[]) => Promise<number[]>;
 }

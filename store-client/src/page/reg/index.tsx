@@ -17,8 +17,11 @@ const Reg = () => {
             await registerApi(values)
             
         }catch (error) {
-            console.log(error);
-            message.error("注册失败");
+            if (error.status === 409) {
+                message.error("用户名或邮箱已存在");
+            }else {
+                message.error("注册失败");
+            }
             return;
         }
         message.success("注册成功");

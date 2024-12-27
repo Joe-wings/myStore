@@ -3,9 +3,9 @@ import Login from "../page/login";
 
 import Reg from "../page/reg";
 import Layouter from "../page/layout";
-import EditPage from "../page/edit";
 import Manage from "../page/manage";
 import Detail from "../page/productdetail";
+import CreateCategory from "../page/category";
 
 const router = createBrowserRouter([
   {
@@ -21,10 +21,6 @@ const router = createBrowserRouter([
     element: <Layouter />,
     children: [
       {
-        path: "/layout/edit",
-        element: <EditPage />,
-      },
-      {
         path: "/layout/manage",
         element: <Manage />,
       },
@@ -32,6 +28,10 @@ const router = createBrowserRouter([
         path: "/layout/detail",
         element: <Detail />,
       },
+      {
+        path: "/layout/newCategory",
+        element: <CreateCategory/>,
+      }
     ],
   },
 ]);

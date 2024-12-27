@@ -18,7 +18,7 @@ type product = {
 type category = {
     products: product[];
     name: string
-    fatherId:number
+    fatherId?:number
     id:number
     children:category[]
 }

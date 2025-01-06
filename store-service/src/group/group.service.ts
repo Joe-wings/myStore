@@ -15,7 +15,17 @@ export class GroupService {
     return this.prisma.group.findMany({
       include: {
         products: true,
-        children: true
+        children: {
+          include: {
+            products: true,
+            children: {
+              include: {
+                products: true,
+                children: true,
+              },
+            },
+          },
+        },
       },
     });
   }
@@ -61,7 +71,6 @@ export class GroupService {
     });
     return products;
   }
-
 
   findBottom = async (id: number, categoryId: number[]) => {
     const group = await this.prisma.group.findFirst({

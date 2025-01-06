@@ -29,10 +29,17 @@ const getGroupByIdApi =  (id:number) => {
     })
 }
 
+const deleteGroupApi =  (id:number) => {
+    return request({
+        url: `/group/${id}`,
+        method: 'DELETE',
+    })  
+}
 
 export {
     getGroupsApi,
     getProductsByGroupApi,
     getGroupByIdApi,
-    createGroupApi
+    createGroupApi,
+    deleteGroupApi
 }

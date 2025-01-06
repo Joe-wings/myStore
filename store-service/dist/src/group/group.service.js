@@ -42,7 +42,17 @@ let GroupService = class GroupService {
         return this.prisma.group.findMany({
             include: {
                 products: true,
-                children: true
+                children: {
+                    include: {
+                        products: true,
+                        children: {
+                            include: {
+                                products: true,
+                                children: true,
+                            },
+                        },
+                    },
+                },
             },
         });
     }

@@ -1,6 +1,6 @@
 import React, { useEffect,  useState } from "react";
-import { Layout, List, Menu, MenuProps, Popconfirm } from "antd";
-import { DeleteOutlined,MenuOutlined } from "@ant-design/icons";
+import {  Input, Layout, List, Menu, MenuProps, Popconfirm } from "antd";
+import { DeleteOutlined,MenuOutlined, SearchOutlined } from "@ant-design/icons";
 import { deleteProductApi, getProductsByUserIdApi } from "../../api/product";
 import { jwtDecode } from "jwt-decode";
 import { category, product } from "../../type";
@@ -14,6 +14,7 @@ const Manage: React.FC = () => {
   const [myProducts, setMyProducts] = useState<product[]>([]);
   const [categorys, setCategorys] = useState<category[]>([]);
   const decode: { id: number } = jwtDecode(getToken() || "");
+  const [searchValue, setSearchValue] = useState<string>("");
   const id = decode?.id;
   
   useEffect( () => {
@@ -52,6 +53,12 @@ const Manage: React.FC = () => {
     const groupId=parseInt(e.key)
     setMyProducts(response.data.filter((p: product) => p.groupId === groupId));
   };
+  
+  const search = async () => {
+    const response = await getProductsByUserIdApi(id);
+    setMyProducts(response.data.filter((p: product) => p.name.includes(searchValue)))
+    console.log(searchValue);
+  }
   //左侧导航栏
   //层级分类
   const items2: MenuProps["items"] = [1].map((key) => {
@@ -101,8 +108,8 @@ const Manage: React.FC = () => {
   });
   return (
     <Layout>
-      
       <Sider width={200}>
+      <div  style={{ backgroundColor: "#ffffff"}} ><Input placeholder="搜索商品" value={searchValue} style={{width:'80%'}} onChange={e=>setSearchValue(e.target.value)}/><a style={{width:'10%',marginLeft:'10%'}} onClick={search}><SearchOutlined /></a></div>
         <Menu
           mode="inline"
           defaultSelectedKeys={["1"]}
@@ -151,7 +158,7 @@ const Manage: React.FC = () => {
               }
             />
             {item.content}
-            <br />
+            <br/>
             &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
             <Popconfirm
               description="确认要下架当前商品吗？"
@@ -175,3 +182,4 @@ const Manage: React.FC = () => {
 };
 
 export default Manage;
+

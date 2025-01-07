@@ -16,7 +16,7 @@ const Reg = () => {
             //调用注册接口
             await registerApi(values)
             
-        }catch (error) {
+        }catch (error:any) {
             if (error.status === 409) {
                 message.error("用户名或邮箱已存在");
             }else {

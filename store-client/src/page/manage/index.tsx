@@ -107,9 +107,9 @@ const Manage: React.FC = () => {
     };
   });
   return (
-    <Layout>
+    <Layout style={{width: '100%'}}>
       <Sider width={200}>
-      <div  style={{ backgroundColor: "#ffffff"}} ><Input placeholder="搜索商品" value={searchValue} style={{width:'80%'}} onChange={e=>setSearchValue(e.target.value)}/><a style={{width:'10%',marginLeft:'10%'}} onClick={search}><SearchOutlined /></a></div>
+      <div  style={{ padding:5,backgroundColor: "#ffffff"}} ><Input placeholder="搜索商品" value={searchValue} style={{width:'80%'}} onChange={e=>setSearchValue(e.target.value)}/><a style={{width:'10%',marginLeft:'10%'}} onClick={search}><SearchOutlined /></a></div>
         <Menu
           mode="inline"
           defaultSelectedKeys={["1"]}
@@ -131,12 +131,12 @@ const Manage: React.FC = () => {
           pageSize: 8,
         }}
         dataSource={data}
-        style={{minWidth: 800, maxWidth: 1000,marginTop: 35,marginLeft: 20}}
+        style={{minWidth: 800,width: '100%',marginTop: 35,marginLeft: 20}}
         renderItem={(item) => (
           <List.Item
             style={{ maxHeight: 250, overflow: "auto", padding: 10 }}
             key={item.title}
-            extra={<img width={100} alt="logo" src={item.image} />}
+            extra={<img width={150} alt="logo" src={item.image} />}
           >
             <List.Item.Meta
               title={

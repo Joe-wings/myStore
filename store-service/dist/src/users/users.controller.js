@@ -27,10 +27,6 @@ let UsersController = class UsersController {
     async register(createUserDto) {
         return new user_entity_1.UserEntity(await this.usersService.create(createUserDto));
     }
-    async findAll() {
-        const users = (await this.usersService.findAll()).map(user => new user_entity_1.UserEntity(user));
-        return users.map(user => new user_entity_1.UserEntity(user));
-    }
     async findOne(id) {
         return new user_entity_1.UserEntity(await this.usersService.findOne(+id));
     }
@@ -44,6 +40,9 @@ let UsersController = class UsersController {
 exports.UsersController = UsersController;
 __decorate([
     (0, common_1.Post)(),
+    (0, swagger_1.ApiOperation)({ summary: '注册用户' }),
+    (0, swagger_1.ApiResponse)({ status: 409, description: '该邮箱已注册过账号' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: '数据格式有误' }),
     (0, swagger_1.ApiCreatedResponse)({ type: user_entity_1.UserEntity }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -51,16 +50,10 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "register", null);
 __decorate([
-    (0, common_1.Get)(),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiOkResponse)({ type: user_entity_1.UserEntity }),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], UsersController.prototype, "findAll", null);
-__decorate([
     (0, common_1.Get)('/getbyid/:id'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiUnauthorizedResponse)({ description: '未授权' }),
     (0, swagger_1.ApiOkResponse)({ type: user_entity_1.UserEntity }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -69,6 +62,8 @@ __decorate([
 ], UsersController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)('/change/:id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)(),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -78,6 +73,7 @@ __decorate([
 __decorate([
     (0, common_1.Delete)('delete/:id'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)(),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

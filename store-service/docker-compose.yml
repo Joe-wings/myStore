@@ -1,15 +1,29 @@
-version: '3.8'
+
 services:
   postgres:
-    image: postgres:13.5
+    image: postgres:14
     restart: always
     environment:
-      - POSTGRES_USER=myuser
-      - POSTGRES_PASSWORD=mypassword
-    volumes:
-      - postgres:/var/lib/postgresql/data
+      - POSTGRES_USER=Joe
+      - POSTGRES_PASSWORD=159357
+      - POSTGRES_DB=mydb
     ports:
       - '5432:5432'
+    networks:
+      - my-networks
 
-volumes:
-  postgres:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgres://Joe:159357@postgres:5432/mydb
+      
+    ports:
+      - '8800:8800'
+    networks: 
+      - my-networks
+
+networks:
+  my-networks:
+

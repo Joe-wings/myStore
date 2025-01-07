@@ -1,8 +1,6 @@
 # 第一阶段：构建阶段
 FROM node:20.18.0 AS builder
 
-# 安装构建工具
-RUN apt-get update && apt-get install -y build-essential python3
 
 # 设置工作目录
 WORKDIR /app
@@ -17,7 +15,7 @@ RUN npm install
 COPY . .
 
 # 生成 Prisma Client
-RUN npx prisma generate
+RUN npm run prisma:generate
 
 # 第二阶段：生产阶段
 FROM node:20.18.0

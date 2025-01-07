@@ -7,8 +7,8 @@ import { category, product } from "../../type";
 import { getGroupsApi } from "../../api/group";
 import { getToken } from "../../utils";
 import Sider from "antd/es/layout/Sider";
-import Create from "../../compent/CreatP";
-import EditP from "../../compent/editP";
+import Create from "../../compent/CreatProduct";
+import EditP from "../../compent/editProduct";
 
 const Manage: React.FC = () => {
   const [myProducts, setMyProducts] = useState<product[]>([]);

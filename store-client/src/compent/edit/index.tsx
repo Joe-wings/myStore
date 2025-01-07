@@ -86,7 +86,7 @@ const EditPage:React.FC<{ id?: number }> = ({id}) => {
     //用户id作为商品创建者id
     const product = {
       ...values,
-      image: imageList[0].thumbUrl,
+      image: imageList[0]? imageList[0].thumbUrl : "https://via.placeholder.com/150",
       creatorId: createId,
     };
     //判断是更新还是创建
@@ -107,7 +107,7 @@ const EditPage:React.FC<{ id?: number }> = ({id}) => {
   };
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <div style={{ textAlign: "center" ,margin: "0 auto"}}>
       <br />
       <Form
         labelCol={{ span: 4 }}
@@ -124,24 +124,28 @@ const EditPage:React.FC<{ id?: number }> = ({id}) => {
         >
           <Input />
         </Form.Item>
+        
         <Form.Item
           label="商品分类"
+          style={{marginBottom:0}}
           name="groupId"
           rules={[{ required: true, message: "请选择商品分类" }]}
-          
         >
-          <div style={{display:"inline-block"}}></div>
           <TreeSelect
+            dropdownStyle={{ maxHeight: 400, overflow: "auto" }}
             treeData={categoryList.map((item) => ({
               title: item.name,
               value: item.id,
               key: item.id,
             }))}
-            
-          /><a href="/layout/newCategory" style={{fontSize:12 }}>没有合适的分类？点此创建</a>
+          />
+          
         </Form.Item>
+        <a href="/layout/newCategory" style={{fontSize:12 ,marginLeft:-35}}>没有合适的分类？点此创建</a>
+        
         <Form.Item
           label="定价"
+          style={{marginTop:5}}
           name="price"
           rules={[{ required: true, message: "请输入商品价格" }]}
         >

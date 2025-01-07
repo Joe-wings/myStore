@@ -7,10 +7,10 @@ export declare class JwtStrategy extends JwtStrategy_base {
     validate(payload: {
         userId: number;
     }): Promise<{
-        id: number;
+        username: string | null;
         email: string;
         password: string;
-        username: string | null;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
     }[]>;

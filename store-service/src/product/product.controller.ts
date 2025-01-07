@@ -12,6 +12,8 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   create(@Body() createProductDto: CreateProductDto) {
     return this.productService.create(createProductDto);
   }

@@ -16,7 +16,7 @@ COPY . .
 
 # 生成 Prisma Client
 RUN npm run prisma:generate
-
+RUN npm run prisma:seed
 # 第二阶段：生产阶段
 FROM node:20.18.0
 

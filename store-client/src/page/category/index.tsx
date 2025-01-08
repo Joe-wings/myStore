@@ -34,7 +34,6 @@ const CreateCategory: React.FC = () => {
   }, []);
 
   const onFinish = async (e: { name: any; fatherId: any }) => {
-    console.log(e);
     await createGroupApi({
       name: e.name,
       fatherId: e.fatherId || null,

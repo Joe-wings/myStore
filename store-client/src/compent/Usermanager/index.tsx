@@ -12,7 +12,7 @@ import { Dropdown, Space } from "antd";
 import { jwtDecode } from "jwt-decode";
 import { getbyuseridApi } from "../../api/user";
 import { user } from "../../type";
-import { getToken, removeToken } from "../../utils";
+import { getToken} from "../../utils";
 import { useNavigate } from "react-router-dom";
 
 const Usermanager: React.FC = () => {
@@ -71,7 +71,7 @@ const Usermanager: React.FC = () => {
       danger: true,
       label: "退出登录",
       onClick: () => {
-        removeToken();
+        localStorage.clear();
         window.location.href = "/";
       },
       icon: <LogoutOutlined />,

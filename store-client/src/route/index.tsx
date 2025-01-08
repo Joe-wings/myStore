@@ -6,6 +6,7 @@ import Layouter from "../page/layout";
 import Manage from "../page/manage";
 import Detail from "../page/productdetail";
 import CreateCategory from "../page/category";
+import Category from "../page/category_v2";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: "/layout/newCategory",
         element: <CreateCategory/>,
+      },
+      {
+        path: "/layout/editCategory",
+        element: <Category/>,
       }
     ],
   },

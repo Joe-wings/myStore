@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-
+import * as bcrypt from 'bcryptjs';
+import { roundsOfHashing } from 'src/users/users.service';
 // initialize Prisma Client
 const prisma = new PrismaClient();
 
@@ -10,12 +11,12 @@ async function main() {
       {
         username: 'John',
         email: 'John@123.com',
-        password: '778899',
+        password:bcrypt.hashSync('778899',roundsOfHashing),
       },
       {
         username: 'Sarah',
         email: 'Sarah@123.com',
-        password: '778899',
+        password: bcrypt.hashSync('778899',roundsOfHashing),
       },
     ],
   });

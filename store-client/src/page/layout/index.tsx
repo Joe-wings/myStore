@@ -14,7 +14,8 @@ const { Header, Content, Sider } = Layout;
 const items1: MenuProps["items"] = [
   { key: "/layout", label: "所有商品列表" },
   { key: "/layout/manage", label: "管理我的商品" },
-  { key: "/layout/newCategory", label: "分类管理"}
+  { key: "/layout/newCategory", label: "创建新分类"},
+  { key: "/layout/editCategory", label: "分类管理" }
 ].map((key) => ({
   key: key.key,
   label: `${key.label}`,

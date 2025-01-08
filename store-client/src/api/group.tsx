@@ -36,10 +36,19 @@ const deleteGroupApi =  (id:number) => {
     })  
 }
 
+const updateGroupApi =  (id:number,data:{name:string,fatherId?:number}) => {
+    return request({
+        url: `/group/${id}`,
+        method: 'PUT',
+        data
+    })  
+}
+
 export {
     getGroupsApi,
     getProductsByGroupApi,
     getGroupByIdApi,
     createGroupApi,
-    deleteGroupApi
+    deleteGroupApi,
+    updateGroupApi
 }

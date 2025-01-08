@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/create-group.dto';
@@ -39,7 +40,7 @@ export class GroupController {
     return this.groupService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   update(@Param('id') id: string, @Body() updateGroupDto: UpdateGroupDto) {

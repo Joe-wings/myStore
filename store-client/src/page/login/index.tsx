@@ -5,7 +5,7 @@ import { setToken } from "../../utils";
 const Login = () => {
   const navigate = useNavigate();
   const onFinish = async (values:{email:string,password:string}) => {
-    console.log("Success:", values);
+    console.log("Success");
     //调用登录接口
     const token= await loginApi(values).catch(err=>{
     
@@ -16,7 +16,6 @@ const Login = () => {
     message.error("用户名错误");}
   )
   //本地化存储token,跳转主页
-  console.log(token);
     if(token){
       setToken(token.data.access_token);
       navigate("/layout");

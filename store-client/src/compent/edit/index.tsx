@@ -82,7 +82,6 @@ const EditPage:React.FC<{ id?: number }> = ({id}) => {
   }, [productId, form]);
   //将表单数据提交到后台
   const onFinish = async (values: any) => {
-    console.log(values);
     //用户id作为商品创建者id
     const product = {
       ...values,

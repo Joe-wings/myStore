@@ -1,6 +1,6 @@
 import React, { useEffect,  useState } from "react";
 import {  Input, Layout, List, Menu, MenuProps, Popconfirm } from "antd";
-import { DeleteOutlined,MenuOutlined, SearchOutlined } from "@ant-design/icons";
+import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
 import { deleteProductApi, getProductsByUserIdApi } from "../../api/product";
 import { jwtDecode } from "jwt-decode";
 import { category, product } from "../../type";
@@ -43,10 +43,6 @@ const Manage: React.FC = () => {
     price: product.price,
     count: product.count,
   }));
-  //查找子分类
-  const findSubCategory = (id: number, categoryList: category[]) => {
-    return categoryList.filter((c) => c.fatherId === id) || undefined;
-  };
   //分组商品
   const grouped = async (e: any) => {
     const response = await getProductsByUserIdApi(id);
@@ -57,55 +53,47 @@ const Manage: React.FC = () => {
   const search = async () => {
     const response = await getProductsByUserIdApi(id);
     setMyProducts(response.data.filter((p: product) => p.name.includes(searchValue)))
-    console.log(searchValue);
   }
   //左侧导航栏
   //层级分类
-  const items2: MenuProps["items"] = [1].map((key) => {
-    return {
-      key: `sub${key}`,
-      icon: <MenuOutlined />,
-      label: `商品分类`,
-      onTitleClick: async () => {
-        const response = await getProductsByUserIdApi(id);
-        setMyProducts(response.data);
-      },
-      children: categorys
-        .filter((c) => c.fatherId === null)
-        .map((category) => {
-          return findSubCategory(category.id, categorys).length > 0
-            ? {
-                key: category.id,
-                label: category.name,
-                children: findSubCategory(category.id, categorys).map(
-                  (category) => {
-                    return findSubCategory(category.id, categorys).length > 0
-                      ? {
-                          key: category.id,
-                          label: category.name,
-                          children: findSubCategory(category.id, categorys).map(
-                            (category) => {
-                              return {
-                                label: category.name,
-                                key: category.id,
-                              };
-                            }
-                          ),
-                        }
-                      : {
-                          key: category.id,
-                          label: category.name,
-                        };
-                  }
-                ),
+  function buildTree(categories: category[]) {
+      // 创建一个映射，用于存储每个类别的id和对应的节点对象
+      const map = new Map();
+      const roots: any[] = [];
+      // 遍历所有类别，初始化映射
+      categories.forEach(category => {
+          map.set(category.id, {
+              key: category.id,
+              label: category.name,
+              children: []
+          });
+      });
+  
+      // 再次遍历，构建树形结构
+      categories.forEach(category => {
+          const node = map.get(category.id);
+          if (category.fatherId === null || category.fatherId === undefined) {
+              // 如果没有parentId，说明是根节点
+              roots.push(node);
+          } else {
+              // 否则，将其添加到父节点的children中
+              const parentNode = map.get(category.fatherId);
+              if (parentNode) {
+                  parentNode.children.push(node);
               }
-            : {
-                key: category.id,
-                label: category.name,
-              };
-        }),
-    };
-  });
+          }
+      });
+      // 删除所有map中没有children的节点
+      map.forEach(node => {
+          if (node.children.length === 0) {
+              delete node.children;
+          }
+      });
+      const items=[{key: "0", label: "全部商品", children: roots}]
+      return items;
+  }
+  // 构建树形结构
+  const items2: MenuProps["items"] = buildTree(categorys)
   return (
     <Layout style={{width: '100%'}}>
       <Sider width={200}>
@@ -125,9 +113,6 @@ const Manage: React.FC = () => {
         itemLayout="vertical"
         size="large"
         pagination={{
-          onChange: (page) => {
-            console.log(page);
-          },
           pageSize: 8,
         }}
         dataSource={data}

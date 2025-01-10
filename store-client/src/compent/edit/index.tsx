@@ -119,7 +119,7 @@ const EditPage:React.FC<{ id?: number }> = ({id}) => {
         <Form.Item
           label="商品名称"
           name="name"
-          rules={[{ required: true, message: "请输入商品名称" }]}
+          rules={[{ required: true, message: "请输入商品名称" },{max:20,message:"商品名称不能超过20个字符"}]}
         >
           <Input />
         </Form.Item>
@@ -146,14 +146,14 @@ const EditPage:React.FC<{ id?: number }> = ({id}) => {
           label="定价"
           style={{marginTop:5}}
           name="price"
-          rules={[{ required: true, message: "请输入商品价格" }]}
+          rules={[{ required: true, message: "请输入商品价格" },{pattern:/^(0|[1-9]\d*)(\.\d{1,2})?$/,message:"请输入有效的价格"}]}
         >
           <InputNumber style={{ width: "100%" }} />
         </Form.Item>
         <Form.Item
           label="库存"
           name="count"
-          rules={[{ required: true, message: "请输入商品价格" }]}
+          rules={[{ required: true, message: "请输入商品库存"},{pattern:/^(0|[1-9]\d*)$/,message:"请输入有效的库存数"}]}
         >
           <InputNumber style={{ width: "100%" }} />
         </Form.Item>

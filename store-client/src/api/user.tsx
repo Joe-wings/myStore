@@ -21,4 +21,12 @@ function getbyuseridApi(id: number) {
     method: "GET"
   })
 }
-export { registerApi, loginApi, getbyuseridApi };
+
+function getallusersApi() {
+  return request({
+    url: "/users/",
+    method: "GET"
+  })
+}
+
+export { registerApi, loginApi, getbyuseridApi,getallusersApi };

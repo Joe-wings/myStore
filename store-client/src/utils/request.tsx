@@ -17,6 +17,7 @@ request.interceptors.request.use(config => {
 
 //通过响应拦截器，拒绝返回没有token的请求
 request.interceptors.response.use(response => {
+ 
   if (response.status === 401) {
     // 未登录，跳转登录页面
     window.location.href = '/login';

@@ -66,7 +66,7 @@ const CreateCategory: React.FC = () => {
           <Form.Item<category>
             label="名称"
             name="name"
-            rules={[{ required: true, message: "请输入要新建的类名!" }]}
+            rules={[{ required: true, message: "请输入要新建的类名!" },{max:8,message:"类名不能超过8个字符！"}]}
           >
             <Input />
           </Form.Item>

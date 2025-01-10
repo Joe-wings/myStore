@@ -1,17 +1,17 @@
 
 services:
-  postgres:
-    image: postgres:14
-    restart: always
-    environment:
-      - POSTGRES_USER=Joe
-      - POSTGRES_PASSWORD=159357
-      - POSTGRES_DB=mydb
-    ports:
-      - '5432:5432'
+  # postgres:
+  #   image: postgres:14
+  #   restart: always
+  #   environment:
+  #     - POSTGRES_USER=Joe
+  #     - POSTGRES_PASSWORD=159357
+  #     - POSTGRES_DB=mydb
+  #   ports:
+  #     - '5432:5432'
       
-    networks:
-      - my-networks
+  #   networks:
+  #     - my-networks
 
   app:
     build: 

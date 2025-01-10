@@ -12,6 +12,7 @@ import EditP from "../../compent/editProduct";
 
 const Manage: React.FC = () => {
   const [myProducts, setMyProducts] = useState<product[]>([]);
+  const [AllProducts, setAllProducts] = useState<product[]>([]);
   const [categorys, setCategorys] = useState<category[]>([]);
   const decode: { id: number } = jwtDecode(getToken() || "");
   const [searchValue, setSearchValue] = useState<string>("");
@@ -22,11 +23,14 @@ const Manage: React.FC = () => {
       try {
         const response = await getProductsByUserIdApi(id);
         const groupResponse = await getGroupsApi();
-       
+        setAllProducts(response.data);
         setCategorys(groupResponse.data);
         setMyProducts(response.data);
       } catch (error: any) {
         console.log(error);
+        if(error.response.status === 401){
+          window.location.href="/"
+        }
       }
     };
     fetchData();
@@ -45,14 +49,12 @@ const Manage: React.FC = () => {
   }));
   //分组商品
   const grouped = async (e: any) => {
-    const response = await getProductsByUserIdApi(id);
     const groupId=parseInt(e.key)
-    setMyProducts(response.data.filter((p: product) => p.groupId === groupId));
+    setMyProducts(AllProducts.filter((p: product) => p.groupId === groupId));
   };
   
   const search = async () => {
-    const response = await getProductsByUserIdApi(id);
-    setMyProducts(response.data.filter((p: product) => p.name.includes(searchValue)))
+    setMyProducts(AllProducts.filter((p: product) => p.name.includes(searchValue)))
   }
   //左侧导航栏
   //层级分类
@@ -89,19 +91,18 @@ const Manage: React.FC = () => {
               delete node.children;
           }
       });
-      const items=[{key: "0", label: "全部商品", children: roots}]
+      const items=[{key: "0", label:<span style={{width:'100%'}} onClick={()=>setMyProducts(AllProducts)}>{<span style={{color:'#1890ff'}}>全部商品</span>}</span>, children: roots}]
       return items;
   }
-  // 构建树形结构
   const items2: MenuProps["items"] = buildTree(categorys)
+
   return (
     <Layout style={{width: '100%'}}>
       <Sider width={200}>
       <div  style={{ padding:5,backgroundColor: "#ffffff"}} ><Input placeholder="搜索商品" value={searchValue} style={{width:'80%'}} onChange={e=>setSearchValue(e.target.value)}/><a style={{width:'10%',marginLeft:'10%'}} onClick={search}><SearchOutlined /></a></div>
         <Menu
           mode="inline"
-          defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["sub1"]}
+          defaultOpenKeys={['0']}
           style={{ height: "100%", borderRight: 0 }}
           items={items2}
           onClick={grouped}

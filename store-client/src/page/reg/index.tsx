@@ -6,7 +6,7 @@ import { registerApi } from "../../api/user";
 const Reg = () => {
     const navigate = useNavigate();
     const onFinish = async (values: { username: string,email: string, password: string, confirm_password: string }) => {
-        console.log("Success:", values);
+        console.log("Success");
         //检查密码是否一致
         if (values.password !== values.confirm_password) {
             message.error("Passwords do not match");

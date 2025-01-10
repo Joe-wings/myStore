@@ -19,6 +19,15 @@ export class UsersController {
     return new UserEntity(await this.usersService.create(createUserDto));
   }
 
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse({ description: '未授权' })  //请求状态码为401时，指定响应返回的类型
+  @ApiOkResponse({ type: [UserEntity]})  //请求状态码为200时，指定响应返回的类型
+  async findAll() {
+    return this.usersService.getAll().then(users => users.map(user => new UserEntity(user)));
+  }
+
   @Get('/getbyid/:id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()

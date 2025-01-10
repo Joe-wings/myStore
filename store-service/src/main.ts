@@ -7,6 +7,7 @@ import { PrismaClientExceptionFilter } from './prisma-client-exception/prisma-cl
 import * as cors from 'cors';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  
   //设置全局异常过滤器
   const {httpAdapter} =app.get(HttpAdapterHost)
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter))

@@ -36,7 +36,7 @@ const deleteGroupApi =  (id:number) => {
     })  
 }
 
-const updateGroupApi =  (id:number,data:{name:string,fatherId?:number}) => {
+const updateGroupApi =  (id:number,data:{name:string,fatherId?:number | null}) => {
     return request({
         url: `/group/${id}`,
         method: 'PUT',
